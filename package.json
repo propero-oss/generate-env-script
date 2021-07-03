@@ -1,0 +1,88 @@
+{
+  "name": "@propero/generate-env-script",
+  "version": "0.0.0",
+  "description": "Generate source files containing environment variables for use in built apps",
+  "main": "-",
+  "scripts": {
+    "build:js": "rollup -c rollup.config.js",
+    "build:go": "node scripts/build-go-binaries.js",
+    "build": "pnpm run build:js && pnpm run build:go",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint --ignore-path .gitignore --ext .ts .",
+    "lint:fix": "eslint --ignore-path .gitignore --ext .ts . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/propero-oss/generate-env-script.git"
+  },
+  "keywords": [
+    "generate",
+    "inject",
+    "environment",
+    "env",
+    "built",
+    "webpack",
+    "binary",
+    "rollup",
+    "node"
+  ],
+  "author": "Propero Team <team@propero.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/propero-oss/generate-env-script/issues"
+  },
+  "homepage": "https://github.com/propero-oss/generate-env-script#readme",
+  "dependencies": {
+    "@ctrl/golang-template": "^1.3.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.2.3",
+    "@semantic-release/npm": "^7.1.3",
+    "@semantic-release/release-notes-generator": "^9.0.3",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^16.0.0",
+    "@types/webpack": "^5.28.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/parser": "^4.28.1",
+    "eslint": "^7.30.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^7.0.0",
+    "jest": "^27.0.6",
+    "jest-preset-typescript": "^1.2.0",
+    "lint-staged": "^11.0.0",
+    "lodash": "^4.17.21",
+    "prettier": "^2.3.2",
+    "rollup": "^2.52.7",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-ts": "^1.4.0",
+    "rollup-plugin-ts-paths": "^1.0.5",
+    "semantic-release": "^17.4.4",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.0.0",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -g .commitlint.config.json -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
