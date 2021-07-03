@@ -1,6 +1,6 @@
+import { generateTemplate } from "src/ts/generate-template";
 import { envJson } from "src/ts/parse-env";
 import webpack, { Compilation, Compiler } from "webpack";
-import { parse } from '@ctrl/golang-template';
 
 interface WebpackPluginGenerateEnvScriptOptions {
   prefixes?: string[];
@@ -36,7 +36,7 @@ export default class WebpackPluginGenerateEnvScript {
   public apply(compiler: Compiler): void {
     const { version, name } = this;
     if (version < 4) (compiler as any).plugin(name, this.createSourceFileAsync);
-    else if (version === 4) compiler.hooks.emit.tapAsync(name, this.createSourceFileAsnyc);
+    else if (version === 4) compiler.hooks.emit.tapAsync(name, this.createSourceFileAsync as never);
     else compiler.hooks.thisCompilation.tap(name, (compilation) => {
       compilation.hooks.processAssets.tapPromise({
         name,
@@ -47,7 +47,7 @@ export default class WebpackPluginGenerateEnvScript {
 
   async createSourceFile(compilation: Compilation) {
     const { path } = this.options;
-    const contents = this.generateFileContents();
+    const contents = await this.generateFileContents();
     if (this.version < 5) compilation.assets[path] = contents;
     else compilation.emitAsset(path, contents);
   }
@@ -56,10 +56,10 @@ export default class WebpackPluginGenerateEnvScript {
     return (compilation, callback) => this.createSourceFile(compilation).then(callback).catch(callback);
   }
 
-  generateFileContents(): webpack.sources.Source {
-    const { prefixes, env, template, name } = this.options;
+  async generateFileContents(): Promise<webpack.sources.Source> {
+    const { prefixes, env, template, name, path } = this.options;
     const json = envJson(prefixes, env);
-    // TODO: load template
-    return new webpack.sources.RawSource(parse(template, { name, json }));
+    const contents = await generateTemplate(template, { var: name, env: json, file: path });
+    return new webpack.sources.RawSource(contents);
   }
 }
